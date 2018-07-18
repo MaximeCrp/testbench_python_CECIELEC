@@ -1,15 +1,16 @@
 import datetime
-import myADC
-import RelayCard
-import mySerial
+#import myADC
+#import RelayCard
+#import mySerial
 from time import sleep
-from pyftdi.ftdi import Ftdi
-from pyftdi.i2c import I2cController
+#from pyftdi.ftdi import Ftdi
+#from pyftdi.i2c import I2cController
 from array import array
 from binascii import hexlify
-import pyftdi.serialext
+#import pyftdi.serialext
 from threading import Thread
 import sys
+from I2cBmsInterface import I2cBmsInterface
 
 
 def bonjour() :
@@ -29,7 +30,7 @@ def bonjour() :
 
 def main() :
     bonjour()
-    test_ftdi()
+    test_i2c()
 
 def test_multimetre():
     voltage = myADC.multimeter("voltmetre")
@@ -44,6 +45,10 @@ def test_relais():
     card = RelayCard.RelayCard()
     card.close_all()
     card.open_all()
+
+def test_i2c():
+    bms = I2cBmsInterface()
+    print(bms.read_ctrl())
 
 def test_serial():
     # Open a serial port on the second FTDI device interface (IF/2) @ 3Mbaud
