@@ -16,14 +16,14 @@ from I2cBmsInterface import I2cBmsInterface
 def bonjour() :
     date_now = datetime.datetime.now()
     date_format = date_now.strftime('%d/%m/%Y')
-    fileC = open("log_dates.txt", 'a')
+    fileC = open("dates.log", 'a')
     fileC.close()
-    with open("log_dates.txt", 'r') as fileR :
+    with open("dates.log", 'r') as fileR :
         whole_file = fileR.read()
         lines = whole_file.split('\n')
     if lines[len(lines)-2] != date_format :
         print("\nBonjour opérateur !\n")
-        with open("log_dates.txt", 'a') as fileW :
+        with open("dates.log", 'a') as fileW :
             fileW.write(date_format + "\n")
     else :
         print("\nRe cher collègue !\n")
