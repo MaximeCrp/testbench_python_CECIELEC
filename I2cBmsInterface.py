@@ -47,17 +47,7 @@ class I2cBmsInterface():
             self.address, self.channel, self.bq, self.reg_ctrl, self.cmd_current, self.cmd_voltage))
 
 if __name__ == '__main__':
-    test = I2cBmsInterface()
-    print(test.read_voltage())
-    sleep(2)
-    print(test.read_current())
-    sleep(2)
-    print(test.read_voltage())
-    sleep(5)
-    print(test.read_voltage())
-    sleep(2)
-    print(test.read_current())
-    sleep(5)
-    print(test.read_voltage())
-    sleep(2)
-    print(test.read_current())
+    while(True):
+        test = I2cBmsInterface()
+        print(test.read_voltage())
+        sleep(1.5)

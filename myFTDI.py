@@ -64,6 +64,7 @@ class I2cFTDI():
         bufT[0] = reg
         bufT[1] = value
         self.retW = I2cFTDI.libMPSSE.I2C_DeviceWrite(self.handle, address, bufT_len, bufT, ctypes.byref(self.bytes_transfered), self.modeSP)
+        print(self.retW)
         return(self.retW == 0) # ret value of 0 means no error encountered
 
     def write_verify_register(self, address, reg, value):
@@ -97,9 +98,30 @@ class I2cFTDI():
             if not self.retR == 0:
                 return(False,bufOut) 
         self.retR = I2cFTDI.libMPSSE.I2C_DeviceRead(self.handle, address, bufR_len, bufR, ctypes.byref(self.bytes_transfered), self.modeSP) # repeated start sans stop avant, pour garder la main sur le bus
+        print(bufR[0])
         bufOut.append(int.from_bytes(bufR[0], byteorder='big', signed=False))
+        print(bufOut)
         return(self.retW == 0 and self.retR == 0, bufOut)
         
+    def write_two_bytes(self, address = 0b1010101, registers = [0x00, 0x01], bytes = [0x7c, 0x40]):
+        bufT_len = 3
+        #bufR_len = 1
+        bufT = ctypes.create_string_buffer(bufT_len)
+        #bufR = ctypes.create_string_buffer(bufR_len)
+        bufT[0] = 0x00
+        bufT[1] = 0x40
+        bufT[2] = 0x7C
+        self.retW = I2cFTDI.libMPSSE.I2C_DeviceWrite(self.handle, address, bufT_len, bufT, ctypes.byref(self.bytes_transfered), self.modeSP)
+        print(self.retW)
+        sleep(2)
+        return
+
+        bufT[0] = registers[1]
+        bufT[1] = bytes[0]
+        sleep(20)
+        self.retW = I2cFTDI.libMPSSE.I2C_DeviceWrite(self.handle, address, bufT_len, bufT, ctypes.byref(self.bytes_transfered), self.modeSP)
+        print(self.retW)
+
     def close_channel(self):
         self.retC = I2cFTDI.libMPSSE.I2C_CloseChannel(self.handle)
         return(self.retC == 0)
@@ -238,8 +260,20 @@ if __name__ == "__main__":
     """
     ftdi = I2cFTDI()
     ftdi.open_channel()
-    ftdi.test5()
-    ftdi.test5()
+    ftdi.write_register(0b1010101, 0x00,  0x16)
+    sleep(2)
+    ftdi.write_register(0b1010101, 0x04,  0x05)
+    sleep(2)
+    ftdi.write_register(0b1010101, 0x64,  0x1B)
+    sleep(2)
+    ftdi.write_register(0b1010101, 0x65,  0x00)
+    sleep(2)
+    ftdi.write_register(0b1010101, 0x00,  0x0F)
+    sleep(2)
+    ftdi.write_register(0b1010101, 0x64,  0x0F)
+    sleep(2)
+    ftdi.write_register(0b1010101, 0x65,  0x00)
+    sleep(2)
 
 """
 read register :
