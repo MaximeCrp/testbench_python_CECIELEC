@@ -53,6 +53,8 @@ def test_relais():
 def test_i2c():
     bms = I2cBmsInterface()
     print(bms.read_voltage())
+    sleep(2)
+    print(bms.read_current())
 
 def test_serial():
     # Open a serial port on the second FTDI device interface (IF/2) @ 3Mbaud

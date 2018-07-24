@@ -23,7 +23,7 @@ class I2cFTDI():
     libMPSSE           = ctypes.cdll.LoadLibrary("libMPSSE.dll") # use of the MPSSE library from FTDI which allows synchronous protocols on FTDI devices
     chn_count          = ctypes.c_int()
 
-    def __init__(self, chn_no = 0, clockrate = 100000):    
+    def __init__(self, chn_no = 1, clockrate = 100000):    
         self.chn_conf           = ChannelConfig(clockrate, 5, 0) # clockrate à confirmer  # commenter le LatencyTimer = 5 et Options = 0
         self.chn_no             = chn_no # channels 0 ( = A ) et 1 ( = B ) configurables en MPSSE (dont i2C) grâce à FT_Prog 
         self.handle             = ctypes.c_void_p()
@@ -111,7 +111,7 @@ class I2cFTDI():
         bufT[0] = 0x00
         bufT[1] = 0x40
         bufT[2] = 0x7C
-        self.retW = I2cFTDI.libMPSSE.I2C_DeviceWrite(self.handle, address, bufT_len, bufT, ctypes.byref(self.bytes_transfered), self.modeSP)
+        self.retW = I2cFTDI.libMPSSE.I2C_DeviceWrite(self.handle, address, 2, bufT, ctypes.byref(self.bytes_transfered), self.modeSP)
         print(self.retW)
         sleep(2)
         return
@@ -260,20 +260,7 @@ if __name__ == "__main__":
     """
     ftdi = I2cFTDI()
     ftdi.open_channel()
-    ftdi.write_register(0b1010101, 0x00,  0x16)
-    sleep(2)
-    ftdi.write_register(0b1010101, 0x04,  0x05)
-    sleep(2)
-    ftdi.write_register(0b1010101, 0x64,  0x1B)
-    sleep(2)
-    ftdi.write_register(0b1010101, 0x65,  0x00)
-    sleep(2)
-    ftdi.write_register(0b1010101, 0x00,  0x0F)
-    sleep(2)
-    ftdi.write_register(0b1010101, 0x64,  0x0F)
-    sleep(2)
-    ftdi.write_register(0b1010101, 0x65,  0x00)
-    sleep(2)
+    ftdi.write_two_bytes()
 
 """
 read register :

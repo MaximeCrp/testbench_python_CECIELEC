@@ -17,7 +17,7 @@ class Serial(serial.Serial) :
     """
     def __init__(self, name, port = None):
         super().__init__()
-        port = Serial.select_serial(name)
+        #port = Serial.select_serial(name)
         if port == None :
             self.port = Serial.select_serial(name)
         else :
@@ -58,5 +58,22 @@ class Serial(serial.Serial) :
 class Hdq(Serial):
     """ class for HDQ communications over a serial port
     """
-    pass
+    
+    def __init__(self, name, port = None):
+        super().__init__(name, port)
+        self.baudrate = 57600
+        self.bytesize = serial.EIGHTBITS
+        self.parity = serial.PARITY_NONE
+        self.stopbits = serial.STOPBITS_TWO
+        
+    def read_reg(self, reg, size = 1):
+        self.write('\x00\xc0\xc0\xC0\xFE\xc0\xc0\xC0'.encode())
+        print(self.read(16))
+
+if __name__ == "__main__":
+    bms = Hdq("bms")
+    print(bms.open_serial())
+    bms.read_reg(0x00)
+    bms.close_serial()
+        
 
