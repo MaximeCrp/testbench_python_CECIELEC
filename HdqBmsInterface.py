@@ -1,3 +1,4 @@
+from threading import Thread
 from mySerial import Hdq
 
 class HdqBmsInterface():
@@ -27,15 +28,3 @@ class HdqBmsInterface():
         print("value: 0x%04X" % value)
         self.hdq.close_serial()
         return(int.from_bytes(bytearr, byteorder = 'little', signed = True))
-
-
-        
-        """
-        write_reg(0x00, 0xe7)
-        write_reg(0x01, 0x29)
-        """
-        """ 
-        def read_reg(self, reg, size = 1):
-            self.write('\x00\xc0\xc0\xC0\xFE\xc0\xc0\xC0'.encode())
-            print(self.read(16))
-        """
