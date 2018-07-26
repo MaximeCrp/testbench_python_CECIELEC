@@ -116,12 +116,6 @@ class I2cFTDI():
         sleep(2)
         return
 
-        bufT[0] = registers[1]
-        bufT[1] = bytes[0]
-        sleep(20)
-        self.retW = I2cFTDI.libMPSSE.I2C_DeviceWrite(self.handle, address, bufT_len, bufT, ctypes.byref(self.bytes_transfered), self.modeSP)
-        print(self.retW)
-
     def close_channel(self):
         self.retC = I2cFTDI.libMPSSE.I2C_CloseChannel(self.handle)
         return(self.retC == 0)
