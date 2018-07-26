@@ -73,7 +73,7 @@ class InterfaceADC:
         finally:
             self.device.close()
 
-class multimeter(InterfaceADC) :
+class Multimeter(InterfaceADC) :
     """ impltementing a multimeter device. The format used is the one from Tenma USB mpultimeters
     """
 

@@ -9,8 +9,9 @@ from array import array
 from binascii import hexlify
 import pyftdi.serialext
 from threading import Thread
-import sys
+import sys, os
 from I2cBmsInterface import I2cBmsInterface
+from Tester import Tester
 
 
 def bonjour() :
@@ -30,12 +31,44 @@ def bonjour() :
 
 def main() :
     bonjour()
-    test_i2c()
+    #test_i2c()
     #test_multimetre()
-    test_relais()
+    #test_relais()
+    test_tester()
 
+def test_tester():
+    tester = Tester()
+    os.system("clear")
+    if not tester.setup():
+        return
+    if not tester.reveil():
+        return
+    if not tester.liberer_leds():
+        return
+    if not tester.switch_18():
+        return
+    if not tester.switch_5():
+        return
+    if not tester.switch_12():
+        return
+    if not tester.switch_9():
+        return
+    if not tester.charge_rapide():
+        return
+    if not tester.charge_normale():
+        return
+    if not tester.batterie_faible():
+        return
+    if not tester.batterie_min():
+        return
+    if not tester.batterie_max():
+        return
+    if not tester.jack_debranche():
+        return
+
+    pass
 def test_multimetre():
-    voltage = myADC.multimeter("voltmetre")
+    voltage = myADC.Multimeter("voltmetre")
     voltage.select_HID()
     voltage.read_multimeter_values()
     voltage.find_value()

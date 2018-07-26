@@ -2,6 +2,7 @@ import serial
 import sys
 import glob
 import serial.tools.list_ports
+import binascii
 
 if sys.version_info >= (3,):
     # as is, don't handle unicodes
@@ -58,22 +59,91 @@ class Serial(serial.Serial) :
 class Hdq(Serial):
     """ class for HDQ communications over a serial port
     """
-    
+    HDQ_BIT1 = 0xFE
+    HDQ_BIT0 = 0xC0
+    HDQ_BIT_THRESHOLD = 0xF8
+
     def __init__(self, name, port = None):
         super().__init__(name, port)
         self.baudrate = 57600
         self.bytesize = serial.EIGHTBITS
         self.parity = serial.PARITY_NONE
         self.stopbits = serial.STOPBITS_TWO
-        
-    def read_reg(self, reg, size = 1):
-        self.write('\x00\xc0\xc0\xC0\xFE\xc0\xc0\xC0'.encode())
-        print(self.read(16))
 
-if __name__ == "__main__":
-    bms = Hdq("bms")
-    print(bms.open_serial())
-    bms.read_reg(0x00)
-    bms.close_serial()
-        
+    def reset(self):
+        #reset
+        self.send_break()
+        self.read()
+
+    def write_byte(self, byte):
+        #convert and write 8 data bits
+        buf = bytearray()
+        for i in range(8):
+            if (byte & 1) == 1:
+                    buf.append(Hdq.HDQ_BIT1)
+            else:
+                    buf.append(Hdq.HDQ_BIT0)
+            byte = byte >> 1
+        print("sending:", binascii.hexlify(buf))
+        self.write(buf)
+        # chew echoed bytes
+        self.read(8)
+
+    def write_bytes(self, byte):
+        #convert and write 8 data bits
+        buf = bytearray()
+        for i in range(16):
+            if (byte & 1) == 1:
+                    buf.append(Hdq.HDQ_BIT1)
+            else:
+                    buf.append(Hdq.HDQ_BIT0)
+            byte = byte >> 1
+        print("sending:", binascii.hexlify(buf))
+        self.write(buf)
+        # chew echoed bytes
+        self.read(8)
+
+    def read_byte(self):
+        #read and convert 8 data bits
+        buf = self.read(8)
+        buf = bytearray(buf)
+        # lsb first, so reverse:
+        buf.reverse()
+        print("recv buf:", binascii.hexlify(buf))
+        byte = 0
+        for i in range(8):
+            byte = byte << 1
+            if buf[i] > Hdq.HDQ_BIT_THRESHOLD:
+                byte = byte | 1       
+        return byte
+
+    @staticmethod
+    def uint16le(bl, bh):
+        word = bh << 8 | bl
+        return word
+
+    def read_reg(self, reg):
+        self.write_byte(reg)
+        return self.read_byte()
+
+    def write_reg(self, reg, byte):
+        self.write_byte(0x80 | reg)
+        self.write_byte(byte)
+
+    def write_cmd(self, reg, cmd):
+        self.write_byte(0x80 | reg)
+        self.write_bytes(cmd)
+
+    @staticmethod
+    def bytes_to_dec(bytes, byteorder = 'big', signed = False):
+            return(int.from_bytes(bytes, byteorder = byteorder, signed = signed))
+
+    
+
+    if __name__ == "__main__":
+        bms = Hdq("bms")
+        print(bms.open_serial())
+        bms.read_reg(0x00)
+        bms.close_serial()
+            
 

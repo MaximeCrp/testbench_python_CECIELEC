@@ -3,7 +3,7 @@ from time import sleep
 
 class RelayCard:
     
-    def __init__(self, port = None, name = "relay1"):
+    def __init__(self, name = "relay1", port = None):
         port = mySerial.Serial.select_serial(name)
         if port == None : ### à ne pas mettre ici, mais bug pour l'instant sinon
             port = mySerial.Serial.select_serial(name)

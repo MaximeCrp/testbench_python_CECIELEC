@@ -113,17 +113,19 @@ def write_cmd(reg, cmd):
 def bytes_to_dec(bytes, byteorder = 'big', signed = False):
         return(int.from_bytes(bytes, byteorder = byteorder, signed = signed))
 
+def read_voltage()
 #main
 if __name__ == '__main__':
     #reset()
     #demo
-    b1 = read_reg(0x10)
-    b2 = read_reg(0x11)
+    b1 = read_reg(0x08)
+    b2 = read_reg(0x09)
     a = bytes([b1, b2])
-    print(int.from_bytes(a, byteorder = 'big', signed = True))
-    value = uint16le(b1,b2)
+    print(int.from_bytes(a, byteorder = 'little', signed = False))
+    value = uint16le(b1, b2)
     print("value: 0x%04X" % value)
-    
+    """
     write_reg(0x00, 0xe7)
     write_reg(0x01, 0x29)
+    """
     

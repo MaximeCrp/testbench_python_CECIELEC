@@ -4,14 +4,14 @@ from time import sleep
 
 class I2cBmsInterface():
 
-    def __init__(self):
+    def __init__(self, cmd_current = [0x10, 0x11], cmd_voltage = [0x08, 0x09], cmd_hdq = [0x00, 0x40, 0x7c]):
         self.address = 0b1010101 # 0b1010101 fixed address of the bq34z100-g1
         self.channel = 0
         self.bq = I2cDevice(self.address, self.channel) 
         self.reg_ctrl = 0x00
-        self.cmd_current = [0x10, 0x11]
-        self.cmd_voltage = [0x08, 0x09]
-        self.cmd_hdq = [0x00, 0x40, 0x7c]
+        self.cmd_current = cmd_current
+        self.cmd_voltage = cmd_voltage
+        self.cmd_hdq = cmd_hdq
 
     def read_current(self):
         if not self.bq.open_channel():
