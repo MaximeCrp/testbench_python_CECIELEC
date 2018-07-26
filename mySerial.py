@@ -161,7 +161,6 @@ class Hdq(Serial):
             return(int.from_bytes(bytes, byteorder = byteorder, signed = signed))
 
     
-
     if __name__ == "__main__":
         bms = Hdq("bms")
         print(bms.open_serial())
