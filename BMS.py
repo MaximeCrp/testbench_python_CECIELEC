@@ -2,9 +2,13 @@ from I2cBmsInterface import I2cBmsInterface
 from HdqBmsInterface import HdqBmsInterface
 
 class BMS :
-    """ class for BMS to test on the testbench
+    """ 
+        class for testing BMS bq34z100-G1 on the testbench
     """
     def __init__(self):
+        """
+            initialize commands for current and voltage control
+        """
         self.cmd_current = [0x10, 0x11]
         self.cmd_voltage = [0x08, 0x09]
         self.cmd_remain_capacity = [0x04, 0x05]
