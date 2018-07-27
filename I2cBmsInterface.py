@@ -1,4 +1,4 @@
-from myFTDI import I2cDevice
+from myI2C import I2cDevice
 import ctypes
 from time import sleep
 
@@ -12,6 +12,10 @@ class I2cBmsInterface():
         self.cmd_current = cmd_current
         self.cmd_voltage = cmd_voltage
         self.cmd_hdq = cmd_hdq
+
+    def __repr__(self):
+        return("adresse : {}, channel : {}, device : {}, ctrl : {}, courant : {}, tension : {}".format(
+            self.address, self.channel, self.bq, self.reg_ctrl, self.cmd_current, self.cmd_voltage))
 
     def read_current(self):
         if not self.bq.open_channel():
@@ -57,10 +61,6 @@ class I2cBmsInterface():
         else:
             self.bq.close_channel()
             return val_dec
-
-    def __repr__(self):
-        return("adresse : {}, channel : {}, device : {}, ctrl : {}, courant : {}, tension : {}".format(
-            self.address, self.channel, self.bq, self.reg_ctrl, self.cmd_current, self.cmd_voltage))
 
 if __name__ == '__main__':
     while(True):

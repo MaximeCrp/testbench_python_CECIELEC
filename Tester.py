@@ -40,7 +40,6 @@ class Tester():
         self.test_cpmmunication = 5
 
 
-
         self.test_leds = 10
         self.test_18_vout = 11
         self.test_18_a = 12

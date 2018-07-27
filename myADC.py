@@ -21,6 +21,7 @@ else:
     sys.stdout = codecs.getwriter('mbcs')(sys.stdout)
 
 class InterfaceADC:
+    
     def __init__(self, name = "basic adc"):
         self.handler = "basic_handler"
         self.name = name
@@ -74,17 +75,14 @@ class InterfaceADC:
             self.device.close()
 
 class Multimeter(InterfaceADC) :
-    """ impltementing a multimeter device. The format used is the one from Tenma USB mpultimeters
+    """ implementing a multimeter device. The format used is the one from Tenma USB multimeters
     """
 
-    def __init__(self, name = "multimeter", dot = 2):
+    def __init__(self, name = "multimeter", dot = 2, unit = 'V'):
         self.name = name
-        self.error = None
-        self.range = None
-        self.function = None
         self.handler = "multimeter_handler"
         self.dot = dot # the dot value allows to know where to put on the dot on the received value
-        self.unit = "V"
+        self.unit = unit
 
     def multimeter_handler(self, data):
             # in data list, only meaningfull values are data[1] and data[2] 
@@ -106,34 +104,6 @@ class Multimeter(InterfaceADC) :
                 print(self)
                 self.nb_measures+=1
                 self.read_byte = -1
-            
-            """elif self.read_byte == 6 :
-                if self.nb_measures>0 and self.range != measure_int :
-                    self.error = "Erreur changement range"
-                self.range = measure_int
-                #print(self.range)
-            elif self.read_byte == 7 :
-                if self.nb_measures>0 and self.function != measure_int :
-                    self.error = "Erreur changement fonction"
-                self.function = measure_int
-                #print(self.function)
-            elif self.read_byte == 8 :
-                self.huit = measure_int
-                #print(self.function)
-            elif self.read_byte == 9 :
-                self.neuf = measure_int
-                #print(self.function)
-                
-            elif self.read_byte == 10 :
-                print("value " + str(self.measures_1)+ \
-                      ", 6 : "+str(self.range) + \
-                      ", 7 : "+str(self.function) + \
-                      ", 8 : "+str(self.huit) + \
-                      ", 9 : "+str(self.neuf))
-                self.nb_measures+=1
-                self.read_byte = -1
-                """
-                
         else:
             pass
         if(self.nb_measures >= 5) :

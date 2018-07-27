@@ -7,6 +7,8 @@ class BMS :
     def __init__(self):
         self.cmd_current = [0x10, 0x11]
         self.cmd_voltage = [0x08, 0x09]
+        self.cmd_remain_capacity = [0x04, 0x05]
+        self.cmd_maximum_capacity = [0x06, 0x07]
         self.cmd_hdq = [0x00, 0x40, 0x7c]
         self.cmd_i2c = [0x00, 0xe7, 0x29]
         self.i2c = I2cBmsInterface(self.cmd_current, self.cmd_voltage, self.cmd_hdq)

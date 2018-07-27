@@ -23,7 +23,7 @@ class I2cFTDI():
     libMPSSE           = ctypes.cdll.LoadLibrary("libMPSSE.dll") # use of the MPSSE library from FTDI which allows synchronous protocols on FTDI devices
     chn_count          = ctypes.c_int()
 
-    def __init__(self, chn_no = 1, clockrate = 100000):    
+    def __init__(self, chn_no = 0, clockrate = 100000):    
         self.chn_conf           = ChannelConfig(clockrate, 5, 0) # clockrate à confirmer  # commenter le LatencyTimer = 5 et Options = 0
         self.chn_no             = chn_no # channels 0 ( = A ) et 1 ( = B ) configurables en MPSSE (dont i2C) grâce à FT_Prog 
         self.handle             = ctypes.c_void_p()
